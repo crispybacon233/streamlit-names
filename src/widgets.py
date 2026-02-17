@@ -67,3 +67,21 @@ def sex_radio():
         on_change=update_sex,
     )
 
+
+def metric_radio():
+    """
+    Widget for choosing comparison metric (count, rank, logarithmic)
+    """
+
+    if 'metric' not in st.session_state:
+        st.session_state.metric = 'count'
+
+    def update_metric():
+        st.session_state.metric = st.session_state._temp_metric
+
+    st.radio(
+        'Choose metric',
+        options=['count', 'rank', 'logarithm'],
+        key='_temp_metric',
+        on_change=update_metric,
+    )

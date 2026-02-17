@@ -12,6 +12,10 @@ st.header('Name Trends')
 with st.popover('Filters'):
     widgets.year_range_slider()
     widgets.name_select()
+    widgets.metric_radio()
 
 
-st.plotly_chart(line_chart_name_counts(), width='content')
+if st.session_state.name_filter:
+    st.plotly_chart(line_chart_name_counts(), width='content')
+else:
+    st.write('Use filter to choose names!')
