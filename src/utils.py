@@ -43,3 +43,6 @@ def init_session_states():
     
     if 'name_filter' not in st.session_state:
         st.session_state.name_filter = ['John - M', 'Mary - F']
+
+    if 'sex' not in st.session_state:
+        st.session_state.sex = 'M'

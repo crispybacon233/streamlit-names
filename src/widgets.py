@@ -47,3 +47,23 @@ def name_select():
         default=st.session_state.name_filter, 
         on_change=update_names
     )
+
+
+def sex_radio():
+    """
+    Widget for selecting sex.
+    """
+
+    if 'sex' not in st.session_state:
+        st.session_state.sex = 'M'
+
+    def update_sex():
+        st.session_state.sex = st.session_state._temp_sex
+
+    st.radio(
+        'Choose sex',
+        options=['M', 'F'],
+        key='_temp_sex',
+        on_change=update_sex,
+    )
+

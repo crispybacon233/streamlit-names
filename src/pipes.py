@@ -2,31 +2,60 @@ import polars as pl
 from typing import List, Tuple
 
 
-def filter_year(df: pl.DataFrame, year_range: Tuple[int]) -> pl.DataFrame:
+def filter_year(df: pl.LazyFrame, year_range: Tuple[int]) -> pl.LazyFrame:
     """
     Filters for years between range.
     
     Args:
-        df (polars DataFrame): Names data.
+        df (polars LazyFrame): Names data.
         year_range (tuple): Tuple of year range.
 
     Returns:
-        pl.DataFrame: The filtered DataFrame.
+        pl.LazyFrame: The filtered LazyFrame.
     """
 
     return df.filter(pl.col('year').is_between(year_range[0], year_range[1]))
 
 
-def name_filter(df: pl.DataFrame, name_filter: List[str]) -> pl.DataFrame:
+def filter_name(df: pl.LazyFrame, name_filter: List[str]) -> pl.LazyFrame:
     """
     Filters for names in list.
     
     Args:
-        df (polars DataFrame): Names data.
+        df (polars LazyFrame): Names data.
         name_filter (List[str]): List of names.
 
     Returns:
-        pl.DataFrame: The filtered DataFrame.
+        pl.LazyFrame: The filtered LazyFrame.
     """
 
     return df.filter(pl.col('name').is_in(name_filter))
+
+
+def filter_sex(df: pl.LazyFrame, sex: str) -> pl.LazyFrame:
+    """
+    Filters for sex.
+    
+    Args:
+        df (polars LazyFrame): Names data.
+        sexs_filter str: Chosen sex.
+
+    Returns:
+        pl.LazyFrame: The filtered LazyFrame.
+    """
+    return df.filter(pl.col('sex') == sex)
+
+
+def top_10_state(df: pl.LazyFrame) -> pl.LazyFrame:
+    """
+    Aggregates the name counts by state then filters for top 10 within a year range.
+    """
+    return (
+        df
+        .group_by('state', 'name', 'sex')
+        .agg(pl.col('count').sum())
+        .with_columns(
+            pl.col('count').rank(method='ordinal', descending=True).over('state').alias('rank')
+        )
+        .filter(pl.col('rank') <= 10)
+    )
