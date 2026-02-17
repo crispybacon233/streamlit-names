@@ -89,4 +89,5 @@ def metric_radio():
         key='_temp_metric',
         index=options.index(st.session_state.metric),
         on_change=update_metric,
+        # horizontal=True,
     )

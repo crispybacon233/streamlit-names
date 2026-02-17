@@ -12,8 +12,9 @@ import src.widgets as widgets
 import src.pipes as pipes
 
 
-
-# load sessions and data
+###############
+# SESSIONS & DATA
+###############
 init_session_states()
 state_data = load_data('data/state_data.parquet')
 
@@ -23,30 +24,27 @@ else:
     sex_title = 'Male'
 
 
-# Define Header
+###############
+# HEADER
+###############
 if st.session_state.year_range[0] == st.session_state.year_range[1]:
     header = f'Top {sex_title} Names by State - {st.session_state.year_range[0]}'
 else:
     header = f'Top {sex_title} Names by State - {st.session_state.year_range[0]} to {st.session_state.year_range[1]}'
 st.header(header)
 
+
+###############
+# FILTERS
+###############
 with st.popover('Filters'):
     widgets.year_range_slider()
     widgets.sex_radio()
 
 
-
 ###############
-# Map of US
+# US MAP
 ###############
-
-temp_df = (
-    state_data
-    .pipe(pipes.filter_year, st.session_state['year_range'])
-    .pipe(pipes.filter_sex, st.session_state['sex'])
-    .collect(engine='streaming')
-)
-
 st.plotly_chart(choropleth_top_10_by_state())
 
 

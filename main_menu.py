@@ -1,5 +1,7 @@
 import streamlit as st
 
+st.set_page_config(layout='wide')
+
 apps = {
     'Name Trends': [st.Page('apps/name_compare.py', title="Name Compare")],
     "By State": [
