@@ -13,33 +13,40 @@ state_data = load_data('data/state_data.parquet')
 
 
 def line_chart_name_counts():
-
+    # define vars
     metric = st.session_state['metric']
+    if metric == 'rank':
+        y = 'rank'
+    else:
+        y = 'count'
 
     temp_df = (
         national_data
-        .pipe(pipes.rank_names, metric)
         .pipe(pipes.filter_name, st.session_state['name_filter'])
         .sort(by=['name', 'year'])
         .collect(engine='streaming')
     )
 
-    if st.session_state['metric'] == 'rank':
-        y = 'rank'
-    else:
-        y = 'count'
-
     line_chart = px.line(
         data_frame=temp_df,
         x='year',
         y=y,
-        color='name'
+        color='name',
+        custom_data=['name', 'count', 'rank']
+    ).update_traces(
+        hovertemplate=(
+            "<b>%{customdata[0]}</b><br>" +
+            "<b>count: %{customdata[1]}</b><br>" +
+            "<b>rank: %{customdata[2]}</b>"
+            )
+    ).update_layout(
+        hovermode='x',
     )
 
     if metric == 'rank':
         line_chart.update_yaxes(autorange="reversed")
     if metric == 'logarithm':
-        line_chart.update_layout(yaxis_type="log")
+        line_chart.update_yaxes(type="log")
 
     return line_chart
 

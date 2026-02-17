@@ -46,23 +46,6 @@ def filter_sex(df: pl.LazyFrame, sex: str) -> pl.LazyFrame:
     return df.filter(pl.col('sex') == sex)
 
 
-def rank_names(df: pl.LazyFrame, metric: str) -> pl.LazyFrame:
-    """
-    If metric is set to 'rank', calculate the ranks for each name.
-    """
-    if metric == 'rank':
-        df = (
-            df
-            .with_columns(
-                pl.col('count')
-                .rank(descending=True, method='dense') 
-                .over('year')
-                .alias('rank')
-            )
-        )
-    return df
-
-
 def top_10_state(df: pl.LazyFrame) -> pl.LazyFrame:
     """
     Aggregates the name counts by state then filters for top 10 within a year range.

@@ -7,10 +7,9 @@ import src.widgets as widgets
 from src.charts import line_chart_name_counts
 
 
-st.header('Name Trends')
+st.header('Name Compare')
 
 with st.popover('Filters'):
-    widgets.year_range_slider()
     widgets.name_select()
     widgets.metric_radio()
 
