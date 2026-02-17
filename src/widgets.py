@@ -29,10 +29,20 @@ def year_range_slider():
 
 
 def name_select():
+    """
+    Widget for selecting names filter.
+    """
+
     if 'name_filter' not in st.session_state:
         st.session_state.name_filter = ['John - M', 'Mary - F']
 
     def update_names():
         st.session_state.name_filter = st.session_state._temp_name_filter
 
-    st.multiselect('Select names', options=NAME_OPTIONS, key='_temp_name_filter', default=st.session_state.name_filter, on_change=update_names)
+    st.multiselect(
+        'Select names', 
+        options=NAME_OPTIONS, 
+        key='_temp_name_filter', 
+        default=st.session_state.name_filter, 
+        on_change=update_names
+    )

@@ -15,3 +15,18 @@ def filter_year(df: pl.DataFrame, year_range: Tuple[int]) -> pl.DataFrame:
     """
 
     return df.filter(pl.col('year').is_between(year_range[0], year_range[1]))
+
+
+def name_filter(df: pl.DataFrame, name_filter: List[str]) -> pl.DataFrame:
+    """
+    Filters for names in list.
+    
+    Args:
+        df (polars DataFrame): Names data.
+        name_filter (List[str]): List of names.
+
+    Returns:
+        pl.DataFrame: The filtered DataFrame.
+    """
+
+    return df.filter(pl.col('name').is_in(name_filter))

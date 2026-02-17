@@ -18,5 +18,6 @@ widgets.name_select()
 temp_df = (
     state_data
     .pipe(pipes.filter_year, st.session_state['year_range'])
+    .pipe(pipes.name_filter, st.session_state['name_filter'])
 )
 st.dataframe(temp_df.head(500))
