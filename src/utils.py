@@ -2,26 +2,23 @@ import streamlit as st
 import polars as pl
 
 
-@st.cache_data
-def load_state_data():
-    print('loading state data...')
-    return pl.read_parquet('data/state_data.parquet')
-
 
 @st.cache_data
-def load_national_data():
-    print('loading national data...')
-    return pl.read_parquet('data/national_data.parquet')
+def load_data(path):
+    print(f'loading state data from {path}...')
+    return pl.scan_parquet(path)
 
 
 @st.cache_data
 def load_unique_state_names():
     print('loading unique state names...')
     return (
-        pl.read_parquet('data/state_data.parquet')
+        pl.scan_parquet('data/state_data.parquet')
         .unique('name')
         .sort(by=['sex', 'name'])
-        .get_column("name")
+        .select("name")
+        .collect(engine='streaming')
+        .get_column('name')
         .to_list()
     )
 
@@ -30,10 +27,12 @@ def load_unique_state_names():
 def load_unique_national_names():
     print('loading unique national names...')
     return (
-        pl.read_parquet('data/national_data.parquet')
+        pl.scan_parquet('data/national_data.parquet')
         .unique('name')
         .sort(by=['sex', 'name'])
-        .get_column("name")
+        .select("name")
+        .collect(engine='streaming')
+        .get_column('name')
         .to_list()
     )
 

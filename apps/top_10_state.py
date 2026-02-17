@@ -6,12 +6,12 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 
-from src.utils import load_state_names
+from src.utils import load_data
 import src.widgets as widgets
 import src.pipes as pipes
 
 
-state_data = load_state_names()
+state_data = load_data('data/state_data.parquet')
 
 
 st.header('Top 10 Names by State')
