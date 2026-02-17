@@ -41,8 +41,6 @@ def line_chart_name_counts():
             )
     ).update_layout(
         hovermode='x',
-        # paper_bgcolor='#fffff2',
-        # plot_bgcolor='#fffff2'
     )
 
     if metric == 'rank':

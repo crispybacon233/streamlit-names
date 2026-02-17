@@ -1,0 +1,8 @@
+[theme]
+font = "poppins"
+headingFont = "poppins"
+codeFont = "poppins"
+[theme.sidebar]
+font = "poppins"
+headingFont = "poppins"
+codeFont = "poppins"
