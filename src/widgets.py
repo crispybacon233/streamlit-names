@@ -1,4 +1,9 @@
 import streamlit as st
+from src.utils import load_unique_state_names
+
+
+# load data for option values
+NAME_OPTIONS = load_unique_state_names()
 
 
 def year_range_slider():
@@ -21,3 +26,13 @@ def year_range_slider():
         key='_temp_slider',
         on_change=update_range
     )
+
+
+def name_select():
+    if 'name_filter' not in st.session_state:
+        st.session_state.name_filter = ['John - M', 'Mary - F']
+
+    def update_names():
+        st.session_state.name_filter = st.session_state._temp_name_filter
+
+    st.multiselect('Select names', options=NAME_OPTIONS, key='_temp_name_filter', default=st.session_state.name_filter, on_change=update_names)

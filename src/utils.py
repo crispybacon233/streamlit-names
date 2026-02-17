@@ -21,7 +21,7 @@ def load_unique_state_names():
         pl.read_parquet('data/state_data.parquet')
         .unique('name')
         .sort(by=['sex', 'name'])
-        ['name']
+        .get_column("name")
         .to_list()
     )
 
@@ -33,6 +33,6 @@ def load_unique_national_names():
         pl.read_parquet('data/national_data.parquet')
         .unique('name')
         .sort(by=['sex', 'name'])
-        ['name']
+        .get_column("name")
         .to_list()
     )
