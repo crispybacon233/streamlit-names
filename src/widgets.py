@@ -1,9 +1,10 @@
 import streamlit as st
-from src.utils import load_unique_state_names
+from src.utils import load_unique_state_names, load_unique_national_names
 
 
 # load data for option values
-NAME_OPTIONS = load_unique_state_names()
+NAME_OPTIONS_STATE = load_unique_state_names()
+NAME_OPTIONS_NATIONAL = load_unique_national_names()
 
 
 def year_range_slider():
@@ -41,7 +42,7 @@ def name_select():
 
     st.multiselect(
         'Select names', 
-        options=NAME_OPTIONS, 
+        options=NAME_OPTIONS_STATE, 
         key='_temp_name_filter', 
         default=st.session_state.name_filter, 
         on_change=update_names
