@@ -15,7 +15,8 @@ def year_range_slider():
 
     st.slider(
         'Select year range',
-        1910, 2024,
+        min_value=1910, 
+        max_value=2024,
         value=st.session_state.year_range,
         key='_temp_slider',
         on_change=update_range
