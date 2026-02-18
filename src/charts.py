@@ -22,7 +22,7 @@ def line_chart_name_counts():
 
     temp_df = (
         national_data
-        .pipe(pipes.filter_name, st.session_state['name_filter'])
+        .pipe(pipes.filter_names_multi, st.session_state['names_filter_multi'])
         .sort(by=['name', 'year'])
         .collect(engine='streaming')
     )
@@ -121,8 +121,8 @@ def choropleth_top_10_by_state():
     top_10_fig.update_traces(
         selector=dict(type='choropleth'),
         hovertemplate=(
-            "<b>State: %{location}</b><br><br>" +
-            "<b>Top 10:</b><br>%{customdata[0]}" +
+            "<b>%{location}</b><br>" +
+            "%{customdata[0]}" +
             "<extra></extra>"
         )
     )
@@ -137,3 +137,12 @@ def choropleth_top_10_by_state():
     top_10_fig.update_geos(bgcolor=bgcolor)
 
     return top_10_fig
+
+
+def choropleth_name_dist():
+    temp_df = (
+        state_data
+        .pipe(pipes.name_state_dist)
+        .pipe(pipes.filter_names_multi, st.session_state['names_filter_multi'])
+        .collect(engine='streaming')
+    )

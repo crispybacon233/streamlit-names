@@ -37,9 +37,13 @@ st.header(header)
 ###############
 # FILTERS
 ###############
-with st.popover('Filters'):
-    widgets.year_range_slider()
+sex_radio_col, year_range_col = st.columns([2, 4], width=500)
+
+with sex_radio_col:
     widgets.sex_radio()
+with year_range_col:
+    widgets.year_range_slider()
+
 
 
 ###############

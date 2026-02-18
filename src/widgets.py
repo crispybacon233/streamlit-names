@@ -29,24 +29,33 @@ def year_range_slider():
     )
 
 
-def name_select():
+def name_select_multi():
     """
     Widget for selecting names filter.
     """
 
-    if 'name_filter' not in st.session_state:
-        st.session_state.name_filter = ['John - M', 'Mary - F']
+    if 'names_filter_multi' not in st.session_state:
+        st.session_state.names_filter_multi = ['John - M', 'Mary - F']
 
     def update_names():
-        st.session_state.name_filter = st.session_state._temp_name_filter
+        st.session_state.names_filter_multi = st.session_state._temp_names_filter_multi
 
     st.multiselect(
         'Select names', 
         options=NAME_OPTIONS_STATE, 
-        key='_temp_name_filter', 
-        default=st.session_state.name_filter, 
+        key='_temp_names_filter_multi', 
+        default=st.session_state.names_filter_multi, 
         on_change=update_names
     )
+
+
+def name_select_single():
+    """
+    Widget for selecting a single name filter.
+    """
+
+    if 'names_filter_single' not in st.session_state:
+        st.s
 
 
 def sex_radio():
@@ -68,6 +77,7 @@ def sex_radio():
         key='_temp_sex',
         index=options.index(st.session_state.sex),
         on_change=update_sex,
+        horizontal=True,
     )
 
 

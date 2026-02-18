@@ -41,8 +41,8 @@ def init_session_states():
     if 'year_range' not in st.session_state:
         st.session_state.year_range = (1910, 2024)
     
-    if 'name_filter' not in st.session_state:
-        st.session_state.name_filter = ['John - M', 'Mary - F']
+    if 'names_filter_multi' not in st.session_state:
+        st.session_state.names_filter_multi = ['John - M', 'Mary - F']
 
     if 'sex' not in st.session_state:
         st.session_state.sex = 'M'

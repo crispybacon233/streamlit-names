@@ -20,7 +20,7 @@ name_select_col, metric_col, chart_col = st.columns([2, 1, 11])
 ###############
 # with st.popover('Filters'):
 with name_select_col:
-    widgets.name_select()
+    widgets.name_select_multi()
 with metric_col:
     widgets.metric_radio()
 
@@ -28,7 +28,7 @@ with metric_col:
 ###############
 # LINE CHART
 ###############
-if st.session_state.name_filter:
+if st.session_state['names_filter_multi']:
     with chart_col:
         st.plotly_chart(line_chart_name_counts())
 else:

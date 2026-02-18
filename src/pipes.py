@@ -17,9 +17,24 @@ def filter_year(df: pl.LazyFrame, year_range: Tuple[int]) -> pl.LazyFrame:
     return df.filter(pl.col('year').is_between(year_range[0], year_range[1]))
 
 
-def filter_name(df: pl.LazyFrame, name_filter: List[str]) -> pl.LazyFrame:
+def filter_names_multi(df: pl.LazyFrame, names_filter_multi: List[str]) -> pl.LazyFrame:
     """
     Filters for names in list.
+    
+    Args:
+        df (polars LazyFrame): Names data.
+        names_filter_multi (List[str]): List of names.
+
+    Returns:
+        pl.LazyFrame: The filtered LazyFrame.
+    """
+
+    return df.filter(pl.col('name').is_in(names_filter_multi))
+
+
+def filter_name_single(df: pl.LazyFrame, names_filter_single: str) -> pl.LazyFrame:
+    """
+    Filters for single name.
     
     Args:
         df (polars LazyFrame): Names data.
@@ -29,7 +44,8 @@ def filter_name(df: pl.LazyFrame, name_filter: List[str]) -> pl.LazyFrame:
         pl.LazyFrame: The filtered LazyFrame.
     """
 
-    return df.filter(pl.col('name').is_in(name_filter))
+    return df.filter(pl.col('name') == names_filter_single)
+
 
 
 def filter_sex(df: pl.LazyFrame, sex: str) -> pl.LazyFrame:
@@ -46,6 +62,23 @@ def filter_sex(df: pl.LazyFrame, sex: str) -> pl.LazyFrame:
     return df.filter(pl.col('sex') == sex)
 
 
+def rank_names(df: pl.LazyFrame, metric: str) -> pl.LazyFrame:
+    """
+    If metric is set to 'rank', calculate the ranks for each name.
+    """
+    if metric == 'rank':
+        df = (
+            df
+            .with_columns(
+                pl.col('count')
+                .rank(descending=True, method='dense') 
+                .over('year', 'sex')
+                .alias('rank')
+            )
+        )
+    return df
+
+
 def top_10_state(df: pl.LazyFrame) -> pl.LazyFrame:
     """
     Aggregates the name counts by state then filters for top 10 within a year range.
@@ -58,4 +91,15 @@ def top_10_state(df: pl.LazyFrame) -> pl.LazyFrame:
             pl.col('count').rank(method='ordinal', descending=True).over('state').alias('rank')
         )
         .filter(pl.col('rank') <= 10)
+    )
+
+
+def name_state_dist(df: pl.LazyFrame) -> pl.LazyFrame:
+    return (
+        df
+        .group_by('state', 'name')
+        .agg(pl.col('count').sum())
+        .with_columns(
+            (pl.col("count") / pl.col("count").sum().over("state")).alias("proportion")
+        )
     )
