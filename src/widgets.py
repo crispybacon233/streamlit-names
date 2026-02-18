@@ -61,7 +61,7 @@ def name_select_single():
         st.session_state.names_filter_single = st.session_state._temp_names_filter_single
     
     st.selectbox(
-        'Name', 
+        'Choose Name', 
         options=NAME_OPTIONS_STATE, 
         key='_temp_names_filter_single', 
         index=NAME_OPTIONS_STATE.index(st.session_state.names_filter_single), 
