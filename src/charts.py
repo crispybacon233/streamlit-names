@@ -40,7 +40,12 @@ def line_chart_name_counts():
             "<b>rank: %{customdata[2]}</b>"
             )
     ).update_layout(
-        hovermode='x',
+        hovermode='x unified',
+        template='plotly_white',
+        margin=dict(l=20, r=20, t=30, b=20),
+        legend_title_text='',
+        xaxis_title='Year',
+        yaxis_title='Birth count' if metric != 'rank' else 'Rank',
     )
 
     if metric == 'rank':
@@ -128,10 +133,11 @@ def choropleth_top_10_by_state():
     )
 
     top_10_fig.update_layout(
-        width=1000,
-        height=600,
+        height=620,
         showlegend=False,
-        paper_bgcolor=bgcolor
+        margin=dict(l=20, r=20, t=20, b=20),
+        paper_bgcolor=bgcolor,
+        plot_bgcolor=bgcolor,
     )
 
     top_10_fig.update_geos(bgcolor=bgcolor)
