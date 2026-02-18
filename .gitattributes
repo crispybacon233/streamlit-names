@@ -1,0 +1,3 @@
+# Keep dashboard branch versions for known conflict-prone app pages during merges.
+apps/name_compare.py merge=ours
+apps/name_popularity.py merge=ours
