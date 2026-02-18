@@ -49,3 +49,35 @@ def init_session_states():
 
     if 'sex' not in st.session_state:
         st.session_state.sex = 'M'
+
+
+def apply_base_style():
+    """Applies a consistent, dashboard-like visual style across pages."""
+
+    st.markdown(
+        """
+        <style>
+            .block-container {
+                padding-top: 1.5rem;
+                padding-bottom: 1rem;
+                max-width: 1300px;
+            }
+            [data-testid="stMetricValue"] {
+                font-size: 1.8rem;
+            }
+            .dashboard-subtitle {
+                color: #6b7280;
+                margin-top: -0.35rem;
+                margin-bottom: 1rem;
+                font-size: 0.95rem;
+            }
+            .panel {
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                padding: 0.75rem 0.9rem;
+                background: #ffffff;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )

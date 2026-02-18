@@ -1,54 +1,53 @@
 import streamlit as st
 
-import polars as pl
-import pandas as pd
-
-import plotly.graph_objects as go
-import plotly.express as px
-
-from src.utils import load_data, init_session_states
+from src.utils import load_data, init_session_states, apply_base_style
 from src.charts import choropleth_top_10_by_state
 import src.widgets as widgets
-import src.pipes as pipes
 
 
 ###############
 # SESSIONS & DATA
 ###############
+apply_base_style()
 init_session_states()
-state_data = load_data('data/state_data.parquet')
+load_data('data/state_data.parquet')
 
-if st.session_state.sex == 'F':
-    sex_title = 'Female'
-else:
-    sex_title = 'Male'
-
+sex_title = 'Female' if st.session_state.sex == 'F' else 'Male'
+start_year, end_year = st.session_state.year_range
 
 ###############
 # HEADER
 ###############
-if st.session_state.year_range[0] == st.session_state.year_range[1]:
-    header = f'Top {sex_title} Names by State - {st.session_state.year_range[0]}'
+st.title('Top 10 Names by State')
+if start_year == end_year:
+    st.markdown(
+        f"<p class='dashboard-subtitle'>Showing <b>{sex_title}</b> baby names for <b>{start_year}</b>.</p>",
+        unsafe_allow_html=True,
+    )
 else:
-    header = f'Top {sex_title} Names by State - {st.session_state.year_range[0]} to {st.session_state.year_range[1]}'
-st.header(header)
-
+    st.markdown(
+        (
+            "<p class='dashboard-subtitle'>"
+            f"Showing <b>{sex_title}</b> baby names from <b>{start_year}</b> to <b>{end_year}</b>."
+            "</p>"
+        ),
+        unsafe_allow_html=True,
+    )
 
 ###############
 # FILTERS
 ###############
-sex_radio_col, year_range_col = st.columns([2, 4], width=500)
+filter_col_1, filter_col_2 = st.columns([1.2, 3])
 
-with sex_radio_col:
-    widgets.sex_radio()
-with year_range_col:
-    widgets.year_range_slider()
+with filter_col_1:
+    with st.container(border=True):
+        widgets.sex_radio()
 
-
+with filter_col_2:
+    with st.container(border=True):
+        widgets.year_range_slider()
 
 ###############
 # US MAP
 ###############
-st.plotly_chart(choropleth_top_10_by_state())
-
-
+st.plotly_chart(choropleth_top_10_by_state(), width='stretch')
