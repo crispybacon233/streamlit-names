@@ -143,6 +143,7 @@ def choropleth_name_dist():
     temp_df = (
         state_data
         .pipe(pipes.name_state_dist)
-        .pipe(pipes.filter_names_multi, st.session_state['names_filter_multi'])
+        .pipe(pipes.filter_name_single, st.session_state['names_filter_single'])
         .collect(engine='streaming')
     )
+

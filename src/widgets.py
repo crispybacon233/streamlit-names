@@ -55,7 +55,18 @@ def name_select_single():
     """
 
     if 'names_filter_single' not in st.session_state:
-        st.s
+        st.session_state.names_filter_single = 'John - M'
+
+    def update_name():
+        st.session_state.names_filter_single = st.session_state._temp_names_filter_single
+    
+    st.selectbox(
+        'Select name', 
+        options=NAME_OPTIONS_STATE, 
+        key='_temp_names_filter_single', 
+        index=NAME_OPTIONS_STATE.index(st.session_state.names_filter_single), 
+        on_change=update_name
+    )
 
 
 def sex_radio():
