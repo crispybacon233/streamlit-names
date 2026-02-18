@@ -15,8 +15,8 @@ st.caption('Explore historical naming trends across the United States.')
 
 apps = {
     'By State': [
-        st.Page('apps/top_10_state.py', title='Top 10 Names by State', icon='🗺️'),
         st.Page('apps/name_popularity.py', title='How Popular is Your Name?', icon='📍'),
+        st.Page('apps/top_10_state.py', title='Top 10 Names by State', icon='🗺️'),
     ],
     'Name Trends': [st.Page('apps/name_compare.py', title='Name Compare', icon='📈')],
 }

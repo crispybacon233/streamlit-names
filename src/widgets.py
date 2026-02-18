@@ -55,7 +55,7 @@ def name_select_single():
     """
 
     if 'names_filter_single' not in st.session_state:
-        st.session_state.names_filter_single = 'John - M'
+        st.session_state.names_filter_single = 'Emmaline - F'
 
     def update_name():
         st.session_state.names_filter_single = st.session_state._temp_names_filter_single
