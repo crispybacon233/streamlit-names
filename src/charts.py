@@ -40,7 +40,12 @@ def line_chart_name_counts():
             "<b>rank: %{customdata[2]}</b>"
             )
     ).update_layout(
-        hovermode='x',
+        hovermode='x unified',
+        template='plotly_white',
+        margin=dict(l=20, r=20, t=30, b=20),
+        legend_title_text='',
+        xaxis_title='Year',
+        yaxis_title='Birth count' if metric != 'rank' else 'Rank',
     )
 
     if metric == 'rank':
@@ -128,10 +133,11 @@ def choropleth_top_10_by_state():
     )
 
     top_10_fig.update_layout(
-        width=1000,
-        height=600,
+        height=620,
         showlegend=False,
-        paper_bgcolor=bgcolor
+        margin=dict(l=20, r=20, t=20, b=20),
+        paper_bgcolor=bgcolor,
+        plot_bgcolor=bgcolor,
     )
 
     top_10_fig.update_geos(bgcolor=bgcolor)
@@ -140,10 +146,41 @@ def choropleth_top_10_by_state():
 
 
 def choropleth_name_dist():
+    selected_name = st.session_state['names_filter_single']
+
     temp_df = (
         state_data
         .pipe(pipes.name_state_dist)
-        .pipe(pipes.filter_name_single, st.session_state['names_filter_single'])
+        .pipe(pipes.filter_name_single, selected_name)
+        .with_columns((pl.col('proportion') * 100).round(2).alias('proportion_pct'))
         .collect(engine='streaming')
     )
 
+    name_dist_fig = px.choropleth(
+        temp_df,
+        locations='state',
+        locationmode='USA-states',
+        scope='usa',
+        color='proportion',
+        color_continuous_scale='Blues',
+        custom_data=['count', 'proportion_pct'],
+    )
+
+    name_dist_fig.update_traces(
+        hovertemplate=(
+            f"<b>%{{location}}</b><br>"
+            f"{selected_name}<br>"
+            "Count: %{customdata[0]}<br>"
+            "Proportion: %{customdata[1]}%"
+            "<extra></extra>"
+        )
+    )
+
+    name_dist_fig.update_layout(
+        template='plotly_white',
+        height=520,
+        margin=dict(l=20, r=20, t=20, b=20),
+        coloraxis_colorbar=dict(title='Share'),
+    )
+
+    return name_dist_fig

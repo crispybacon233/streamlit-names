@@ -20,7 +20,7 @@ def year_range_slider():
         st.session_state.year_range = st.session_state._temp_slider
 
     st.slider(
-        'Select year range',
+        'Year range',
         min_value=1910, 
         max_value=2024,
         value=st.session_state.year_range,
@@ -41,7 +41,7 @@ def name_select_multi():
         st.session_state.names_filter_multi = st.session_state._temp_names_filter_multi
 
     st.multiselect(
-        'Select names', 
+        'Names to compare', 
         options=NAME_OPTIONS_STATE, 
         key='_temp_names_filter_multi', 
         default=st.session_state.names_filter_multi, 
@@ -61,7 +61,7 @@ def name_select_single():
         st.session_state.names_filter_single = st.session_state._temp_names_filter_single
     
     st.selectbox(
-        'Select name', 
+        'Name', 
         options=NAME_OPTIONS_STATE, 
         key='_temp_names_filter_single', 
         index=NAME_OPTIONS_STATE.index(st.session_state.names_filter_single), 
@@ -83,7 +83,7 @@ def sex_radio():
         st.session_state.sex = st.session_state._temp_sex
 
     st.radio(
-        'Choose sex',
+        'Sex',
         options=['M', 'F'],
         key='_temp_sex',
         index=options.index(st.session_state.sex),
@@ -105,10 +105,10 @@ def metric_radio():
         st.session_state.metric = st.session_state._temp_metric
 
     st.radio(
-        'Choose metric',
+        'Metric',
         options=options,
         key='_temp_metric',
         index=options.index(st.session_state.metric),
         on_change=update_metric,
-        # horizontal=True,
+        horizontal=True,
     )
