@@ -35,7 +35,6 @@ def line_chart_name_counts():
         custom_data=['name', 'count', 'rank'],
     ).update_traces(
         hovertemplate=(
-            "<b>%{customdata[0]}</b><br>" +
             "<b>count: %{customdata[1]}</b><br>" +
             "<b>rank: %{customdata[2]}</b>"
             )
