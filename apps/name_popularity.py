@@ -4,7 +4,7 @@ import polars as pl
 import src.pipes as pipes
 import src.widgets as widgets
 import src.utils as utils
-from src.charts import choropleth_name_dist
+from src.charts import choropleth_name_dist, line_chart_single_name_count
 from src.utils import apply_base_style
 
 
@@ -63,12 +63,35 @@ with content_col:
         metric_col2.metric('Top State', top_state['state'])
         metric_col3.metric('Top Share', f"{top_state['proportion'] * 100:.2f}%")
 
+        st.markdown('#### State Share Map')
         st.plotly_chart(choropleth_name_dist(), width='stretch')
 
-        st.dataframe(
-            name_dist_df.with_columns((pl.col('proportion') * 100).round(2).alias('share_pct'))
+        st.markdown('#### National Count Trend')
+        st.plotly_chart(line_chart_single_name_count(), width='stretch')
+
+        table_df = (
+            name_dist_df
+            .with_columns((pl.col('proportion') * 100).round(2).alias('share_pct'))
             .select(['state', 'count', 'share_pct'])
-            .rename({'count': 'total_births', 'share_pct': 'share_%'}),
+            .sort('share_pct', descending=True)
+            .rename({'state': 'State', 'count': 'Births', 'share_pct': 'Share (%)'})
+            .with_row_index(name='Rank', offset=1)
+        )
+
+        st.markdown('#### State Breakdown')
+        st.dataframe(
+            table_df,
             width='stretch',
-            height=420,
+            height=460,
+            hide_index=True,
+            column_config={
+                'Rank': st.column_config.NumberColumn('Rank', format='%d', width='small'),
+                'State': st.column_config.TextColumn('State', width='small'),
+                'Births': st.column_config.NumberColumn('Births', format='%d', width='medium'),
+                'Share (%)': st.column_config.NumberColumn(
+                    'Share (%)',
+                    format='%.2f%%',
+                    width='large',
+                ),
+            },
         )

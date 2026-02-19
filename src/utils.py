@@ -77,6 +77,16 @@ def apply_base_style():
                 padding: 0.75rem 0.9rem;
                 background: #ffffff;
             }
+            [data-testid="stDataFrame"] {
+                border: 1px solid #e5e7eb;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+            }
+            [data-testid="stDataFrame"] [role="columnheader"] {
+                background: #f8fafc;
+                font-weight: 600;
+            }
         </style>
         """,
         unsafe_allow_html=True,

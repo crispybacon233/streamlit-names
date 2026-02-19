@@ -55,6 +55,50 @@ def line_chart_name_counts():
     return line_chart
 
 
+def line_chart_single_name_count():
+    selected_name = st.session_state['names_filter_single']
+
+    temp_df = (
+        national_data
+        .pipe(pipes.filter_name_single, selected_name)
+        .group_by('year')
+        .agg(pl.col('count').sum().alias('count'))
+        .sort('year')
+        .collect(engine='streaming')
+    )
+
+    line_chart = px.line(
+        data_frame=temp_df,
+        x='year',
+        y='count',
+    )
+
+    line_chart.update_traces(
+        mode='lines+markers',
+        line=dict(color='#2563EB', width=3),
+        marker=dict(size=5),
+        hovertemplate=(
+            "<b>%{x}</b><br>"
+            "Births: %{y:,}"
+            "<extra></extra>"
+        ),
+    )
+
+    line_chart.update_layout(
+        template='plotly_white',
+        height=330,
+        margin=dict(l=20, r=20, t=20, b=20),
+        hovermode='x unified',
+        xaxis_title='Year',
+        yaxis_title='National Birth Count',
+        showlegend=False,
+    )
+
+    line_chart.update_yaxes(tickformat=',d')
+
+    return line_chart
+
+
 def choropleth_top_10_by_state():
     # define vars
     if st.session_state.sex == 'F':
@@ -179,7 +223,7 @@ def choropleth_name_dist():
         template='plotly_white',
         height=520,
         margin=dict(l=20, r=20, t=20, b=20),
-        coloraxis_colorbar=dict(title='Share'),
+        coloraxis_showscale=False,
     )
 
     return name_dist_fig
